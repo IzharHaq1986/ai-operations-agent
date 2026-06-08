@@ -1,314 +1,244 @@
-# project_state.md
+# AI Operations Agent
 
-## Project
+## Project Overview
 
-AI Operations Agent
+The AI Operations Agent is an operational intelligence platform designed to observe DevOps signals, analyze failures, generate recommendations, and support safe operational decision-making through human-approved workflows.
 
-## Current Phase
+The project extends beyond traditional CI/CD automation by introducing structured reasoning, risk assessment, auditability, and governance controls.
 
-Phase 0 — Architecture Definition & Governance Baseline
-
-Status: In Progress
+Status: Phase 0 — Architecture & Governance Baseline
 
 ---
 
-## Project Vision
+## Vision
 
-Build an AI-powered operations platform capable of observing DevOps signals, analyzing failures, producing actionable recommendations, and enforcing safe operational guardrails before executing high-risk actions.
+Build a system capable of transforming operational telemetry into actionable intelligence while maintaining strong safety, auditability, and human oversight.
 
-The system must prioritize:
+The system should help engineering teams:
 
-* Deterministic behavior
-* Auditability
-* Human approval workflows
-* Safe operational boundaries
-* Clear separation between observation, reasoning, and action
+* Understand failures faster.
+* Reduce manual investigation effort.
+* Improve operational consistency.
+* Reduce deployment and change-management risk.
+* Maintain accountability for operational decisions.
 
 ---
 
 ## Problem Statement
 
-Traditional CI/CD automation executes predefined workflows but does not understand operational outcomes.
+Traditional CI/CD systems automate execution but do not explain outcomes.
 
-Engineering teams still spend significant time:
+Engineering teams must still:
 
-* Reading CI/CD logs
-* Diagnosing failures
-* Determining root causes
-* Drafting remediation steps
-* Creating issues and release documentation
-* Reviewing operational risk
+* Read workflow logs.
+* Investigate failures.
+* Determine likely root causes.
+* Evaluate operational risk.
+* Draft remediation actions.
+* Track operational decisions.
 
-The AI Operations Agent aims to reduce this manual effort through structured analysis and decision support.
-
----
-
-## High-Level Goal
-
-Transform DevOps telemetry into actionable operational intelligence.
-
-From:
-
-"Automation executes workflows."
-
-To:
-
-"Agent understands workflow outcomes and recommends safe next actions."
+The AI Operations Agent aims to assist with these activities while preserving human control over high-risk actions.
 
 ---
 
-## Scope (Minimum Viable Product)
+## Project Goals
 
-### Included
+### Primary Goals
 
-* CI/CD log ingestion
-* Failure analysis
-* Failure summarization
-* Root-cause categorization
-* Suggested remediation generation
-* Risk classification
-* Safe next-action recommendations
-* Audit logging
-* Human approval gates
+* Analyze CI/CD failures.
+* Summarize operational events.
+* Classify severity levels.
+* Recommend safe next actions.
+* Support operational decision-making.
+* Maintain auditable decision records.
 
-### Excluded
+### Secondary Goals
 
-* Autonomous production deployments
-* Autonomous infrastructure modifications
-* Autonomous pull request merges
-* Autonomous credential management
-* Autonomous approval bypasses
+* Reduce investigation time.
+* Improve operational visibility.
+* Standardize incident analysis.
+* Improve release readiness reviews.
 
 ---
 
-## Architectural Principles
+## Out of Scope
 
-### Principle 1
+The following capabilities are intentionally excluded from the initial project phases:
 
-Observation must be separated from action.
+* Autonomous production deployments.
+* Autonomous infrastructure modifications.
+* Autonomous credential management.
+* Autonomous policy changes.
+* Autonomous pull request merges.
+* Autonomous approval decisions.
 
-### Principle 2
-
-All high-risk actions require explicit human approval.
-
-### Principle 3
-
-Agent recommendations must be explainable.
-
-### Principle 4
-
-Operational events must be auditable.
-
-### Principle 5
-
-Failure analysis should be reproducible.
-
-### Principle 6
-
-No hidden decision pathways.
+All high-risk actions must remain human controlled.
 
 ---
 
-## Proposed Technology Stack
+## Core Architectural Principles
 
-### Backend
+### Principle 1: Human Approval First
 
-* Python 3.12+
-* FastAPI
+High-risk operational actions require explicit human approval before execution.
 
-### AI Layer
+### Principle 2: Explainable Recommendations
 
-* OpenAI API (future integration)
-* Structured prompt framework
-* Deterministic response validation
+Recommendations should be understandable and traceable.
 
-### DevOps
+### Principle 3: Auditability
 
-* GitHub Actions
-* Docker
-* Docker Compose
+Operational decisions must be reviewable after the fact.
 
-### Storage
+### Principle 4: Least Privilege
 
-* SQLite (initial)
-* PostgreSQL (future)
+Every component receives only the permissions required to perform its function.
 
-### Testing
+### Principle 5: Separation of Concerns
 
-* Pytest
-* Ruff
-* Coverage
+Observation, analysis, authorization, and execution must remain separate responsibilities.
+
+### Principle 6: Fail Safe by Default
+
+When uncertainty exists, the system should recommend review rather than action.
 
 ---
 
-## Development Roadmap
+## Trust Model
 
-### Phase 1
+### Trusted Components
 
-CI/CD Foundation
-
-Status: Complete (existing DevOps CI/CD Showcase)
-
-Objectives:
-
-* GitHub Actions
-* Docker deployment
-* Health checks
-* Rollback awareness
-
----
-
-### Phase 2
-
-Failure Analysis Service
-
-Status: Not Started
-
-Deliverables:
-
-POST /analyze-ci-failure
-
-Input:
-
-* CI/CD logs
-
-Output:
-
-* Failure summary
-* Likely root cause
-* Suggested fix
-* Risk classification
-* Recommended next action
-
----
-
-### Phase 3
-
-GitHub Workflow Integration
-
-Status: Not Started
-
-Deliverables:
-
-* Read workflow runs
-* Detect failures
-* Collect logs
-* Generate issue drafts
-
----
-
-### Phase 4
-
-Operational Risk Engine
-
-Status: Not Started
-
-Deliverables:
-
-* Severity classification
-* Confidence scoring
-* Action recommendations
-
----
-
-### Phase 5
-
-Approval & Guardrails
-
-Status: Not Started
-
-Deliverables:
-
-* Human approval workflow
-* Action authorization layer
-* Protected operation policies
-
----
-
-### Phase 6
-
-Audit & Compliance
-
-Status: Not Started
-
-Deliverables:
-
-* Decision history
-* Action history
-* Approval history
-* Operational reporting
-
----
-
-## Trust Boundaries
-
-### Trusted
-
-* FastAPI application
-* Validation layer
 * Policy engine
-* Approval engine
+* Authorization controls
+* Validation layer
+* Approval workflows
+* Audit logging
 
-### Untrusted
+### Untrusted Components
 
-* AI model outputs
+* AI-generated outputs
 * External logs
-* User inputs
+* User-provided inputs
 * Third-party integrations
+* Future agent actions
 
-All untrusted data must pass validation before influencing operational decisions.
+Untrusted information must be validated before influencing operational decisions.
+
+---
+
+## AI Agent Security Requirements
+
+All AI agents are treated as untrusted systems.
+
+The platform must enforce:
+
+* Policy-based authorization.
+* Least-privilege access.
+* Validated tool execution.
+* Input sanitization.
+* Trusted/untrusted context separation.
+* Human approval checkpoints.
+* Runtime monitoring.
+* Identity isolation.
+* Audit logging.
+* Continuous adversarial evaluation.
+
+---
+
+## Governance Rules
+
+### Branch Protection
+
+Required.
+
+### Pull Requests
+
+Required.
+
+### Direct Commits to Main
+
+Not permitted.
+
+### Code Reviews
+
+Required before merge.
+
+### CI Validation
+
+Required before merge.
+
+### Squash Merge
+
+Preferred.
+
+---
+
+## Documentation Standards
+
+Documentation should:
+
+* Focus on long-term value.
+* Reduce operational ambiguity.
+* Remain concise and maintainable.
+* Avoid unnecessary complexity.
+* Explain decisions and rationale.
 
 ---
 
 ## Success Criteria
 
-The project successfully demonstrates:
+Phase 0 is considered complete when:
 
-1. AI-assisted CI/CD failure analysis.
-2. Structured operational recommendations.
-3. Human-in-the-loop governance.
-4. Safe operational boundaries.
-5. Auditability of recommendations and actions.
-6. Production-quality engineering practices.
+* Project direction is documented.
+* Governance expectations are documented.
+* Trust boundaries are documented.
+* Approval requirements are documented.
+* Operational principles are documented.
+* Repository workflow is established.
 
----
-
-## Repository Governance
-
-### Branch Protection
-
-Required
-
-### Pull Requests
-
-Required
-
-### CI Checks
-
-Required
-
-### Direct Commits to Main
-
-Prohibited
-
-### Squash Merge
-
-Required
+No application code is required for Phase 0 completion.
 
 ---
 
-## Current Status Summary
+## Future Roadmap
 
-Project initialized.
+### Phase 1
 
-Architecture definition underway.
+Repository foundation and development standards.
 
-No production code implemented.
+### Phase 2
 
-No AI integrations implemented.
+Failure analysis service.
 
-No GitHub integrations implemented.
+### Phase 3
 
-Next Milestone:
+Operational classification and recommendation engine.
 
-Phase 0 completion and architecture review.
+### Phase 4
+
+GitHub workflow integration.
+
+### Phase 5
+
+Approval and authorization framework.
+
+### Phase 6
+
+Auditability and operational reporting.
+
+---
+
+## Pre-Flight Check
+
+* Main branch protection required.
+* Pull request workflow required.
+* No direct commits to main.
+* No application code added in this phase.
+* No AI model integration added in this phase.
+* No GitHub integration added in this phase.
+* No external I/O added in this phase.
+* No autonomous operational actions permitted.
+* Human approval required for high-risk actions.
+* AI agents treated as untrusted systems.
+* Trusted and untrusted context must remain separated.
+* Temporary PR files removed if present.
