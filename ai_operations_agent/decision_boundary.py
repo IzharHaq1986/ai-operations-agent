@@ -36,11 +36,13 @@ class ActionRequest:
 
 @dataclass(frozen=True)
 class DecisionResult:
-    """Deterministic decision result."""
+    """Deterministic decision result with minimal audit context."""
 
     status: DecisionStatus
     reason: str
-
+    action: str | None = None
+    risk_level: RiskLevel | None = None
+    approval_required: bool = False
 
 SUPPORTED_ACTIONS = frozenset(
     {
@@ -90,21 +92,33 @@ def decide_action(request: ActionRequest | None) -> DecisionResult:
         return DecisionResult(
             status=DecisionStatus.REQUIRES_APPROVAL,
             reason="human_approval_required",
+            action=request.action,
+            risk_level=request.risk_level,
+            approval_required=True,
         )
 
     if request.risk_level == RiskLevel.HIGH and request.human_approved:
         return DecisionResult(
             status=DecisionStatus.ALLOWED,
             reason="human_approval_verified",
+            action=request.action,
+            risk_level=request.risk_level,
+            approval_required=True,
         )
 
     if request.risk_level == RiskLevel.LOW:
         return DecisionResult(
             status=DecisionStatus.ALLOWED,
             reason="low_risk_action",
+            action=request.action,
+            risk_level=request.risk_level,
+            approval_required=False,
         )
 
     return DecisionResult(
         status=DecisionStatus.REJECTED,
         reason="unrecognized_risk_level",
+        action=request.action,
+        risk_level=request.risk_level,
+        approval_required=True,
     )
