@@ -10,7 +10,7 @@ def test_missing_request_is_rejected():
     result = decide_action(None)
 
     assert result.status == DecisionStatus.REJECTED
-    assert result.reason == "missing_request"
+    assert result.reason == "invalid_request"
 
 
 def test_unsupported_action_is_rejected():
@@ -22,7 +22,7 @@ def test_unsupported_action_is_rejected():
     result = decide_action(request)
 
     assert result.status == DecisionStatus.REJECTED
-    assert result.reason == "unsupported_action"
+    assert result.reason == "invalid_request"
 
 
 def test_low_risk_supported_action_is_allowed():
@@ -74,3 +74,41 @@ def test_agent_claimed_approval_does_not_bypass_human_approval():
 
     assert result.status == DecisionStatus.REQUIRES_APPROVAL
     assert result.reason == "human_approval_required"
+
+
+def test_blank_action_is_rejected():
+    request = ActionRequest(
+        action=" ",
+        risk_level=RiskLevel.LOW,
+    )
+
+    result = decide_action(request)
+
+    assert result.status == DecisionStatus.REJECTED
+    assert result.reason == "invalid_request"
+
+
+def test_non_boolean_human_approval_is_rejected():
+    request = ActionRequest(
+        action="propose_change",
+        risk_level=RiskLevel.HIGH,
+        human_approved="yes",  # type: ignore[arg-type]
+    )
+
+    result = decide_action(request)
+
+    assert result.status == DecisionStatus.REJECTED
+    assert result.reason == "invalid_request"
+
+
+def test_non_boolean_agent_claimed_approval_is_rejected():
+    request = ActionRequest(
+        action="propose_change",
+        risk_level=RiskLevel.HIGH,
+        agent_claimed_approval="yes",  # type: ignore[arg-type]
+    )
+
+    result = decide_action(request)
+
+    assert result.status == DecisionStatus.REJECTED
+    assert result.reason == "invalid_request"

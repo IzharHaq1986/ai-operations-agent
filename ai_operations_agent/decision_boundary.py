@@ -51,19 +51,39 @@ SUPPORTED_ACTIONS = frozenset(
 )
 
 
+def is_valid_action_request(request: ActionRequest | None) -> bool:
+    """Return whether the request is structurally valid.
+
+    This validation is intentionally small and deterministic.
+    It rejects missing requests, empty actions, unsupported actions,
+    and non-boolean approval flags before decision handling.
+    """
+
+    if request is None:
+        return False
+
+    if not isinstance(request.action, str) or not request.action.strip():
+        return False
+
+    if request.action not in SUPPORTED_ACTIONS:
+        return False
+
+    if not isinstance(request.human_approved, bool):
+        return False
+
+    if not isinstance(request.agent_claimed_approval, bool):
+        return False
+
+    return True
+
+
 def decide_action(request: ActionRequest | None) -> DecisionResult:
     """Return a deterministic decision for a requested action."""
 
-    if request is None:
+    if not is_valid_action_request(request):
         return DecisionResult(
             status=DecisionStatus.REJECTED,
-            reason="missing_request",
-        )
-
-    if not request.action or request.action not in SUPPORTED_ACTIONS:
-        return DecisionResult(
-            status=DecisionStatus.REJECTED,
-            reason="unsupported_action",
+            reason="invalid_request",
         )
 
     if request.risk_level == RiskLevel.HIGH and not request.human_approved:
