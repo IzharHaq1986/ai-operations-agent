@@ -112,3 +112,37 @@ def test_non_boolean_agent_claimed_approval_is_rejected():
 
     assert result.status == DecisionStatus.REJECTED
     assert result.reason == "invalid_request"
+
+
+def test_low_risk_result_includes_audit_context():
+    request = ActionRequest(
+        action="read_status",
+        risk_level=RiskLevel.LOW,
+    )
+
+    result = decide_action(request)
+
+    assert result.action == "read_status"
+    assert result.risk_level == RiskLevel.LOW
+    assert result.approval_required is False
+
+
+def test_high_risk_result_requires_approval_in_audit_context():
+    request = ActionRequest(
+        action="propose_change",
+        risk_level=RiskLevel.HIGH,
+    )
+
+    result = decide_action(request)
+
+    assert result.action == "propose_change"
+    assert result.risk_level == RiskLevel.HIGH
+    assert result.approval_required is True
+
+
+def test_invalid_request_result_does_not_include_trusted_audit_context():
+    result = decide_action(None)
+
+    assert result.action is None
+    assert result.risk_level is None
+    assert result.approval_required is False
