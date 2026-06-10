@@ -2,6 +2,8 @@ from ai_operations_agent.decision_boundary import (
     ActionRequest,
     DecisionStatus,
     RiskLevel,
+    SUPPORTED_ACTIONS,
+    SupportedAction,
     decide_action,
 )
 
@@ -27,7 +29,7 @@ def test_unsupported_action_is_rejected():
 
 def test_low_risk_supported_action_is_allowed():
     request = ActionRequest(
-        action="read_status",
+        action=SupportedAction.READ_STATUS.value,
         risk_level=RiskLevel.LOW,
     )
 
@@ -39,7 +41,7 @@ def test_low_risk_supported_action_is_allowed():
 
 def test_high_risk_action_requires_human_approval():
     request = ActionRequest(
-        action="propose_change",
+        action=SupportedAction.PROPOSE_CHANGE.value,
         risk_level=RiskLevel.HIGH,
     )
 
@@ -191,4 +193,12 @@ def test_decision_result_serializes_invalid_request_without_trusted_context():
         "action": None,
         "risk_level": None,
         "approval_required": False,
+    }
+
+
+def test_supported_action_constants_match_allowed_actions():
+    assert SUPPORTED_ACTIONS == {
+        SupportedAction.READ_STATUS.value,
+        SupportedAction.CREATE_PLAN.value,
+        SupportedAction.PROPOSE_CHANGE.value,
     }

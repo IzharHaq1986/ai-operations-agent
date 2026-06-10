@@ -23,6 +23,12 @@ class DecisionStatus(str, Enum):
     REQUIRES_APPROVAL = "requires_approval"
     REJECTED = "rejected"
 
+class SupportedAction(str, Enum):
+    """Actions supported by the decision boundary."""
+
+    READ_STATUS = "read_status"
+    CREATE_PLAN = "create_plan"
+    PROPOSE_CHANGE = "propose_change"
 
 @dataclass(frozen=True)
 class ActionRequest:
@@ -55,13 +61,9 @@ class DecisionResult:
             "approval_required": self.approval_required,
         }
 
-SUPPORTED_ACTIONS = frozenset(
-    {
-        "read_status",
-        "create_plan",
-        "propose_change",
-    }
-)
+SUPPORTED_ACTIONS = frozenset(action.value for action in SupportedAction)
+
+
 
 
 def is_valid_action_request(request: ActionRequest | None) -> bool:
