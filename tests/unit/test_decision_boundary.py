@@ -146,3 +146,49 @@ def test_invalid_request_result_does_not_include_trusted_audit_context():
     assert result.action is None
     assert result.risk_level is None
     assert result.approval_required is False
+
+
+def test_decision_result_serializes_low_risk_action():
+    request = ActionRequest(
+        action="read_status",
+        risk_level=RiskLevel.LOW,
+    )
+
+    result = decide_action(request)
+
+    assert result.to_dict() == {
+        "status": "allowed",
+        "reason": "low_risk_action",
+        "action": "read_status",
+        "risk_level": "low",
+        "approval_required": False,
+    }
+
+
+def test_decision_result_serializes_high_risk_approval_required_action():
+    request = ActionRequest(
+        action="propose_change",
+        risk_level=RiskLevel.HIGH,
+    )
+
+    result = decide_action(request)
+
+    assert result.to_dict() == {
+        "status": "requires_approval",
+        "reason": "human_approval_required",
+        "action": "propose_change",
+        "risk_level": "high",
+        "approval_required": True,
+    }
+
+
+def test_decision_result_serializes_invalid_request_without_trusted_context():
+    result = decide_action(None)
+
+    assert result.to_dict() == {
+        "status": "rejected",
+        "reason": "invalid_request",
+        "action": None,
+        "risk_level": None,
+        "approval_required": False,
+    }
