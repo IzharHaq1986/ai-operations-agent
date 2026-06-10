@@ -23,12 +23,24 @@ class DecisionStatus(str, Enum):
     REQUIRES_APPROVAL = "requires_approval"
     REJECTED = "rejected"
 
+
+class DecisionReason(str, Enum):
+    """Stable reason codes returned by the decision boundary."""
+
+    INVALID_REQUEST = "invalid_request"
+    HUMAN_APPROVAL_REQUIRED = "human_approval_required"
+    HUMAN_APPROVAL_VERIFIED = "human_approval_verified"
+    LOW_RISK_ACTION = "low_risk_action"
+    UNRECOGNIZED_RISK_LEVEL = "unrecognized_risk_level"
+
+
 class SupportedAction(str, Enum):
     """Actions supported by the decision boundary."""
 
     READ_STATUS = "read_status"
     CREATE_PLAN = "create_plan"
     PROPOSE_CHANGE = "propose_change"
+
 
 @dataclass(frozen=True)
 class ActionRequest:
@@ -61,9 +73,8 @@ class DecisionResult:
             "approval_required": self.approval_required,
         }
 
+
 SUPPORTED_ACTIONS = frozenset(action.value for action in SupportedAction)
-
-
 
 
 def is_valid_action_request(request: ActionRequest | None) -> bool:
@@ -98,13 +109,13 @@ def decide_action(request: ActionRequest | None) -> DecisionResult:
     if not is_valid_action_request(request):
         return DecisionResult(
             status=DecisionStatus.REJECTED,
-            reason="invalid_request",
+            reason=DecisionReason.INVALID_REQUEST.value,
         )
 
     if request.risk_level == RiskLevel.HIGH and not request.human_approved:
         return DecisionResult(
             status=DecisionStatus.REQUIRES_APPROVAL,
-            reason="human_approval_required",
+            reason=DecisionReason.HUMAN_APPROVAL_REQUIRED.value,
             action=request.action,
             risk_level=request.risk_level,
             approval_required=True,
@@ -113,7 +124,7 @@ def decide_action(request: ActionRequest | None) -> DecisionResult:
     if request.risk_level == RiskLevel.HIGH and request.human_approved:
         return DecisionResult(
             status=DecisionStatus.ALLOWED,
-            reason="human_approval_verified",
+            reason=DecisionReason.HUMAN_APPROVAL_VERIFIED.value,
             action=request.action,
             risk_level=request.risk_level,
             approval_required=True,
@@ -122,7 +133,7 @@ def decide_action(request: ActionRequest | None) -> DecisionResult:
     if request.risk_level == RiskLevel.LOW:
         return DecisionResult(
             status=DecisionStatus.ALLOWED,
-            reason="low_risk_action",
+            reason=DecisionReason.LOW_RISK_ACTION.value,
             action=request.action,
             risk_level=request.risk_level,
             approval_required=False,
@@ -130,19 +141,8 @@ def decide_action(request: ActionRequest | None) -> DecisionResult:
 
     return DecisionResult(
         status=DecisionStatus.REJECTED,
-        reason="unrecognized_risk_level",
+        reason=DecisionReason.UNRECOGNIZED_RISK_LEVEL.value,
         action=request.action,
         risk_level=request.risk_level,
         approval_required=True,
     )
-
-    def to_dict(self) -> dict[str, str | bool | None]:
-        """Return a stable dictionary representation for audit and tests."""
-
-        return {
-            "status": self.status.value,
-            "reason": self.reason,
-            "action": self.action,
-            "risk_level": self.risk_level.value if self.risk_level else None,
-            "approval_required": self.approval_required,
-        }
