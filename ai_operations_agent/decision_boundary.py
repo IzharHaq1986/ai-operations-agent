@@ -82,7 +82,7 @@ def is_valid_action_request(request: ActionRequest | None) -> bool:
 
     This validation is intentionally small and deterministic.
     It rejects missing requests, empty actions, unsupported actions,
-    and non-boolean approval flags before decision handling.
+    invalid risk levels, and non-boolean approval flags before decision handling.
     """
 
     if request is None:
@@ -92,6 +92,9 @@ def is_valid_action_request(request: ActionRequest | None) -> bool:
         return False
 
     if request.action not in SUPPORTED_ACTIONS:
+        return False
+
+    if not isinstance(request.risk_level, RiskLevel):
         return False
 
     if not isinstance(request.human_approved, bool):

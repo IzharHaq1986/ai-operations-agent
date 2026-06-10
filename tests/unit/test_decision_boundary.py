@@ -211,3 +211,18 @@ def test_decision_reason_constants_match_expected_values():
     assert DecisionReason.HUMAN_APPROVAL_VERIFIED.value == "human_approval_verified"
     assert DecisionReason.LOW_RISK_ACTION.value == "low_risk_action"
     assert DecisionReason.UNRECOGNIZED_RISK_LEVEL.value == "unrecognized_risk_level"
+
+
+def test_invalid_risk_level_is_rejected():
+    request = ActionRequest(
+        action=SupportedAction.READ_STATUS.value,
+        risk_level="medium",  # type: ignore[arg-type]
+    )
+
+    result = decide_action(request)
+
+    assert result.status == DecisionStatus.REJECTED
+    assert result.reason == DecisionReason.INVALID_REQUEST.value
+    assert result.action is None
+    assert result.risk_level is None
+    assert result.approval_required is False
