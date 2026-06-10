@@ -44,6 +44,17 @@ class DecisionResult:
     risk_level: RiskLevel | None = None
     approval_required: bool = False
 
+    def to_dict(self) -> dict[str, str | bool | None]:
+        """Return a stable dictionary representation for audit and tests."""
+
+        return {
+            "status": self.status.value,
+            "reason": self.reason,
+            "action": self.action,
+            "risk_level": self.risk_level.value if self.risk_level else None,
+            "approval_required": self.approval_required,
+        }
+
 SUPPORTED_ACTIONS = frozenset(
     {
         "read_status",
@@ -122,3 +133,14 @@ def decide_action(request: ActionRequest | None) -> DecisionResult:
         risk_level=request.risk_level,
         approval_required=True,
     )
+
+    def to_dict(self) -> dict[str, str | bool | None]:
+        """Return a stable dictionary representation for audit and tests."""
+
+        return {
+            "status": self.status.value,
+            "reason": self.reason,
+            "action": self.action,
+            "risk_level": self.risk_level.value if self.risk_level else None,
+            "approval_required": self.approval_required,
+        }
