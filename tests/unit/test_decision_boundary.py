@@ -226,3 +226,21 @@ def test_invalid_risk_level_is_rejected():
     assert result.action is None
     assert result.risk_level is None
     assert result.approval_required is False
+
+
+def test_decision_result_serializes_approved_high_risk_action():
+    request = ActionRequest(
+        action=SupportedAction.PROPOSE_CHANGE.value,
+        risk_level=RiskLevel.HIGH,
+        human_approved=True,
+    )
+
+    result = decide_action(request)
+
+    assert result.to_dict() == {
+        "status": DecisionStatus.ALLOWED.value,
+        "reason": DecisionReason.HUMAN_APPROVAL_VERIFIED.value,
+        "action": SupportedAction.PROPOSE_CHANGE.value,
+        "risk_level": RiskLevel.HIGH.value,
+        "approval_required": True,
+    }
