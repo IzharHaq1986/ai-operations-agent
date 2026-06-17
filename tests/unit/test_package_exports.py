@@ -7,6 +7,7 @@ from ai_operations_agent import (
     SupportedAction,
     decide_action,
     is_valid_action_request,
+    __version__,
 )
 
 
@@ -19,3 +20,7 @@ def test_public_package_exports_are_available():
     assert SupportedAction is not None
     assert decide_action is not None
     assert is_valid_action_request is not None
+
+
+def test_package_version_is_available():
+    assert __version__ == "0.1.0"
