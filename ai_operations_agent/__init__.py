@@ -11,6 +11,7 @@ from ai_operations_agent.decision_boundary import (
     SupportedAction,
     decide_action,
     is_valid_action_request,
+    SUPPORTED_ACTIONS,
 )
 
 __all__ = [
@@ -23,4 +24,5 @@ __all__ = [
     "decide_action",
     "is_valid_action_request",
     "__version__",
+    "SUPPORTED_ACTIONS",
 ]
