@@ -8,7 +8,15 @@ from ai_operations_agent import (
     decide_action,
     is_valid_action_request,
     __version__,
-   SUPPORTED_ACTIONS,
+    SUPPORTED_ACTIONS,
+    FailureCategory,
+    FailureClassification,
+    FailureInput,
+    FailureReason,
+    FailureSeverity,
+    FailureStatus,
+    classify_failure,
+    is_valid_failure_input,
 )
 
 
@@ -21,6 +29,14 @@ def test_public_package_exports_are_available():
     assert SupportedAction is not None
     assert decide_action is not None
     assert is_valid_action_request is not None
+    assert FailureCategory is not None
+    assert FailureClassification is not None
+    assert FailureInput is not None
+    assert FailureReason is not None
+    assert FailureSeverity is not None
+    assert FailureStatus is not None
+    assert classify_failure is not None
+    assert is_valid_failure_input is not None
 
 
 def test_package_version_is_available():

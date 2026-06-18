@@ -14,6 +14,17 @@ from ai_operations_agent.decision_boundary import (
     SUPPORTED_ACTIONS,
 )
 
+from ai_operations_agent.failure_classifier import (
+    FailureCategory,
+    FailureClassification,
+    FailureInput,
+    FailureReason,
+    FailureSeverity,
+    FailureStatus,
+    classify_failure,
+    is_valid_failure_input,
+)
+
 __all__ = [
     "ActionRequest",
     "DecisionReason",
@@ -25,4 +36,12 @@ __all__ = [
     "is_valid_action_request",
     "__version__",
     "SUPPORTED_ACTIONS",
+    "FailureCategory",
+    "FailureClassification",
+    "FailureInput",
+    "FailureReason",
+    "FailureSeverity",
+    "FailureStatus",
+    "classify_failure",
+    "is_valid_failure_input",
 ]
