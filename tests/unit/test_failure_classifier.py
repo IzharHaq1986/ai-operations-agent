@@ -89,3 +89,15 @@ def test_invalid_failure_input_returns_false():
 
 def test_failure_classification_type_is_available():
     assert FailureClassification is not None
+
+
+def test_non_string_failure_message_is_rejected():
+    result = classify_failure(
+        FailureInput(message=404),  # type: ignore[arg-type]
+    )
+
+    assert result.status == FailureStatus.REJECTED
+    assert result.reason == FailureReason.INVALID_FAILURE_INPUT.value
+    assert result.category == FailureCategory.UNKNOWN
+    assert result.severity == FailureSeverity.UNKNOWN
+    assert result.review_required is True
