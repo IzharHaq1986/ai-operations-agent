@@ -25,3 +25,21 @@ result = decide_action(request)
 
 print(result.to_dict())
 ```
+
+## Failure Classification Example
+
+Phase 2 adds a deterministic failure-classification boundary.
+
+It does not ingest live CI logs, call GitHub, call models, execute tools, or perform remediation. It only classifies explicitly provided structured failure text.
+
+```python
+from ai_operations_agent import FailureInput, classify_failure
+
+failure = FailureInput(
+    message="pytest reported test failed",
+)
+
+result = classify_failure(failure)
+
+print(result.to_dict())
+```
