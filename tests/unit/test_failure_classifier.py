@@ -101,3 +101,15 @@ def test_non_string_failure_message_is_rejected():
     assert result.category == FailureCategory.UNKNOWN
     assert result.severity == FailureSeverity.UNKNOWN
     assert result.review_required is True
+
+
+def test_failure_classification_is_case_insensitive():
+    result = classify_failure(
+        FailureInput(message="PyTest Reported TEST FAILED"),
+    )
+
+    assert result.status == FailureStatus.CLASSIFIED
+    assert result.reason == FailureReason.CLASSIFIED_TEST_FAILURE.value
+    assert result.category == FailureCategory.TEST
+    assert result.severity == FailureSeverity.MEDIUM
+    assert result.review_required is True
