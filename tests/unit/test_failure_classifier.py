@@ -113,3 +113,14 @@ def test_failure_classification_is_case_insensitive():
     assert result.category == FailureCategory.TEST
     assert result.severity == FailureSeverity.MEDIUM
     assert result.review_required is True
+
+def test_dependency_failure_classification_is_case_insensitive():
+    result = classify_failure(
+        FailureInput(message="IMPORTERROR: Missing Package"),
+    )
+
+    assert result.status == FailureStatus.CLASSIFIED
+    assert result.reason == FailureReason.CLASSIFIED_DEPENDENCY_FAILURE.value
+    assert result.category == FailureCategory.DEPENDENCY
+    assert result.severity == FailureSeverity.MEDIUM
+    assert result.review_required is True
