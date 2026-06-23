@@ -135,3 +135,14 @@ def test_lint_failure_classification_is_case_insensitive():
     assert result.category == FailureCategory.LINT
     assert result.severity == FailureSeverity.LOW
     assert result.review_required is False
+
+def test_configuration_failure_classification_is_case_insensitive():
+    result = classify_failure(
+        FailureInput(message="YAML CONFIGURATION ERROR"),
+    )
+
+    assert result.status == FailureStatus.CLASSIFIED
+    assert result.reason == FailureReason.CLASSIFIED_CONFIGURATION_FAILURE.value
+    assert result.category == FailureCategory.CONFIGURATION
+    assert result.severity == FailureSeverity.HIGH
+    assert result.review_required is True
