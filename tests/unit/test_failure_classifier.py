@@ -179,3 +179,14 @@ def test_failure_classification_handles_multiline_messages():
     assert result.category == FailureCategory.TEST
     assert result.severity == FailureSeverity.MEDIUM
     assert result.review_required is True
+
+def test_unknown_failure_classification_is_stable():
+    result = classify_failure(
+        FailureInput(message="random unexpected runner output"),
+    )
+
+    assert result.status == FailureStatus.CLASSIFIED
+    assert result.reason == FailureReason.CLASSIFIED_UNKNOWN_FAILURE.value
+    assert result.category == FailureCategory.UNKNOWN
+    assert result.severity == FailureSeverity.UNKNOWN
+    assert result.review_required is True
