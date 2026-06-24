@@ -157,3 +157,14 @@ def test_failure_classification_uses_first_matching_precedence():
     assert result.category == FailureCategory.TEST
     assert result.severity == FailureSeverity.MEDIUM
     assert result.review_required is True
+
+def test_failure_classification_ignores_surrounding_whitespace():
+    result = classify_failure(
+        FailureInput(message="   pytest failed   "),
+    )
+
+    assert result.status == FailureStatus.CLASSIFIED
+    assert result.reason == FailureReason.CLASSIFIED_TEST_FAILURE.value
+    assert result.category == FailureCategory.TEST
+    assert result.severity == FailureSeverity.MEDIUM
+    assert result.review_required is True
