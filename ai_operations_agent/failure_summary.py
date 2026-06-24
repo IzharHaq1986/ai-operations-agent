@@ -2,6 +2,8 @@
 
 from dataclasses import dataclass
 
+from ai_operations_agent.failure_classifier import FailureClassification
+
 
 @dataclass(frozen=True)
 class FailureSummary:
@@ -21,3 +23,16 @@ class FailureSummary:
             "reason": self.reason,
             "review_required": self.review_required,
         }
+
+
+def create_failure_summary(
+    classification: FailureClassification,
+) -> FailureSummary:
+    """Create a deterministic summary from a failure classification."""
+
+    return FailureSummary(
+        category=classification.category.value,
+        severity=classification.severity.value,
+        reason=classification.reason,
+        review_required=classification.review_required,
+    )
