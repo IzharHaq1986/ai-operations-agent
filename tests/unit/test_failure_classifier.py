@@ -168,3 +168,14 @@ def test_failure_classification_ignores_surrounding_whitespace():
     assert result.category == FailureCategory.TEST
     assert result.severity == FailureSeverity.MEDIUM
     assert result.review_required is True
+
+def test_failure_classification_handles_multiline_messages():
+    result = classify_failure(
+        FailureInput(message="pytest failed\nadditional runner context"),
+    )
+
+    assert result.status == FailureStatus.CLASSIFIED
+    assert result.reason == FailureReason.CLASSIFIED_TEST_FAILURE.value
+    assert result.category == FailureCategory.TEST
+    assert result.severity == FailureSeverity.MEDIUM
+    assert result.review_required is True
