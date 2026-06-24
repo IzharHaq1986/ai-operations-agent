@@ -13,3 +13,18 @@ def test_failure_summary_stores_structured_fields():
     assert summary.severity == "medium"
     assert summary.reason == "classified_test_failure"
     assert summary.review_required is True
+
+def test_failure_summary_serialization_is_stable():
+    summary = FailureSummary(
+        category="test",
+        severity="medium",
+        reason="classified_test_failure",
+        review_required=True,
+    )
+
+    assert summary.to_dict() == {
+        "category": "test",
+        "severity": "medium",
+        "reason": "classified_test_failure",
+        "review_required": True,
+    }
