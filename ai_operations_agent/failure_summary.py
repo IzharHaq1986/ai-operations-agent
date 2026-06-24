@@ -25,10 +25,26 @@ class FailureSummary:
         }
 
 
+def is_valid_failure_classification(
+    classification: object,
+) -> bool:
+    """Return whether a value is a valid failure classification."""
+
+    return isinstance(classification, FailureClassification)
+
+
 def create_failure_summary(
     classification: FailureClassification,
 ) -> FailureSummary:
     """Create a deterministic summary from a failure classification."""
+
+    if not is_valid_failure_classification(classification):
+        return FailureSummary(
+            category="unknown",
+            severity="unknown",
+            reason="invalid_failure_classification",
+            review_required=True,
+        )
 
     return FailureSummary(
         category=classification.category.value,

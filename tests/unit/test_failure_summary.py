@@ -45,3 +45,13 @@ def test_create_failure_summary_from_classification():
         "reason": "classified_test_failure",
         "review_required": True,
     }
+
+def test_create_failure_summary_rejects_invalid_classification():
+    summary = create_failure_summary(None)  # type: ignore[arg-type]
+
+    assert summary.to_dict() == {
+        "category": "unknown",
+        "severity": "unknown",
+        "reason": "invalid_failure_classification",
+        "review_required": True,
+    }
