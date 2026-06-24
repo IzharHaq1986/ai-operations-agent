@@ -17,6 +17,7 @@ from ai_operations_agent import (
     FailureStatus,
     classify_failure,
     is_valid_failure_input,
+    FailureSummary
 )
 
 
@@ -44,3 +45,6 @@ def test_package_version_is_available():
 
 def test_supported_actions_export_is_available():
     assert len(SUPPORTED_ACTIONS) > 0
+
+def test_failure_summary_type_is_exported():
+    assert FailureSummary is not None
