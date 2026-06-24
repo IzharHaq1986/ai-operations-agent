@@ -2,6 +2,8 @@
 
 __version__ = "0.1.0"
 
+from ai_operations_agent.failure_summary import FailureSummary
+
 from ai_operations_agent.decision_boundary import (
     ActionRequest,
     DecisionReason,
@@ -25,6 +27,7 @@ from ai_operations_agent.failure_classifier import (
     is_valid_failure_input,
 )
 
+
 __all__ = [
     "ActionRequest",
     "DecisionReason",
@@ -44,4 +47,7 @@ __all__ = [
     "FailureStatus",
     "classify_failure",
     "is_valid_failure_input",
+    "FailureSummary"
 ]
+
+
