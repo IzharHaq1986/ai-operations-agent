@@ -146,3 +146,14 @@ def test_configuration_failure_classification_is_case_insensitive():
     assert result.category == FailureCategory.CONFIGURATION
     assert result.severity == FailureSeverity.HIGH
     assert result.review_required is True
+
+def test_failure_classification_uses_first_matching_precedence():
+    result = classify_failure(
+        FailureInput(message="ruff lint failure and pytest test failed"),
+    )
+
+    assert result.status == FailureStatus.CLASSIFIED
+    assert result.reason == FailureReason.CLASSIFIED_TEST_FAILURE.value
+    assert result.category == FailureCategory.TEST
+    assert result.severity == FailureSeverity.MEDIUM
+    assert result.review_required is True
