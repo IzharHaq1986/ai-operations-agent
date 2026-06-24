@@ -11,3 +11,13 @@ class FailureSummary:
     severity: str
     reason: str
     review_required: bool
+
+    def to_dict(self) -> dict[str, str | bool]:
+        """Return a stable dictionary representation of the failure summary."""
+
+        return {
+            "category": self.category,
+            "severity": self.severity,
+            "reason": self.reason,
+            "review_required": self.review_required,
+        }
