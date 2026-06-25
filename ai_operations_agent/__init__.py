@@ -2,6 +2,8 @@
 
 __version__ = "0.1.0"
 
+from ai_operations_agent.response_envelope import ResponseEnvelope
+
 from ai_operations_agent.decision_boundary import (
     SUPPORTED_ACTIONS,
     ActionRequest,
@@ -52,4 +54,5 @@ __all__ = [
     "FailureSummary",
     "create_failure_summary",
     "is_valid_failure_classification",
+    "ResponseEnvelope"
 ]

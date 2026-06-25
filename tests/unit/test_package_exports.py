@@ -20,6 +20,7 @@ from ai_operations_agent import (
     is_valid_action_request,
     is_valid_failure_classification,
     is_valid_failure_input,
+    ResponseEnvelope,
 )
 
 
@@ -57,3 +58,6 @@ def test_failure_summary_type_is_exported():
 def test_failure_summary_helpers_are_exported():
     assert create_failure_summary is not None
     assert is_valid_failure_classification is not None
+
+def test_response_envelope_type_is_exported():
+    assert ResponseEnvelope is not None
