@@ -43,3 +43,44 @@ result = classify_failure(failure)
 
 print(result.to_dict())
 ```
+
+## Failure Summary Example
+
+The failure summary boundary converts a trusted failure classification into a deterministic, structured summary suitable for operator-facing output.
+
+```python
+from ai_operations_agent import (
+    FailureInput,
+    classify_failure,
+    create_failure_summary,
+)
+
+classification = classify_failure(
+    FailureInput(message="pytest failed"),
+)
+
+summary = create_failure_summary(classification)
+
+print(summary.to_dict())
+```
+
+Expected output:
+
+```python
+{
+    "category": "test",
+    "severity": "medium",
+    "reason": "classified_test_failure",
+    "review_required": True,
+}
+```
+
+The failure summary boundary:
+
+* accepts trusted `FailureClassification` objects
+* returns deterministic structured output
+* preserves fail-closed behavior
+* performs no external I/O
+* performs no model calls
+* performs no tool execution
+* performs no autonomous actions
