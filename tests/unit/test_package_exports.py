@@ -1,23 +1,25 @@
 from ai_operations_agent import (
+    SUPPORTED_ACTIONS,
     ActionRequest,
     DecisionReason,
     DecisionResult,
     DecisionStatus,
-    RiskLevel,
-    SupportedAction,
-    decide_action,
-    is_valid_action_request,
-    __version__,
-    SUPPORTED_ACTIONS,
     FailureCategory,
     FailureClassification,
     FailureInput,
     FailureReason,
     FailureSeverity,
     FailureStatus,
+    FailureSummary,
+    RiskLevel,
+    SupportedAction,
+    __version__,
     classify_failure,
+    create_failure_summary,
+    decide_action,
+    is_valid_action_request,
+    is_valid_failure_classification,
     is_valid_failure_input,
-    FailureSummary
 )
 
 
@@ -43,8 +45,15 @@ def test_public_package_exports_are_available():
 def test_package_version_is_available():
     assert __version__ == "0.1.0"
 
+
 def test_supported_actions_export_is_available():
     assert len(SUPPORTED_ACTIONS) > 0
 
+
 def test_failure_summary_type_is_exported():
     assert FailureSummary is not None
+
+
+def test_failure_summary_helpers_are_exported():
+    assert create_failure_summary is not None
+    assert is_valid_failure_classification is not None

@@ -2,9 +2,8 @@
 
 __version__ = "0.1.0"
 
-from ai_operations_agent.failure_summary import FailureSummary
-
 from ai_operations_agent.decision_boundary import (
+    SUPPORTED_ACTIONS,
     ActionRequest,
     DecisionReason,
     DecisionResult,
@@ -13,9 +12,7 @@ from ai_operations_agent.decision_boundary import (
     SupportedAction,
     decide_action,
     is_valid_action_request,
-    SUPPORTED_ACTIONS,
 )
-
 from ai_operations_agent.failure_classifier import (
     FailureCategory,
     FailureClassification,
@@ -26,9 +23,16 @@ from ai_operations_agent.failure_classifier import (
     classify_failure,
     is_valid_failure_input,
 )
+from ai_operations_agent.failure_summary import (
+    FailureSummary,
+    create_failure_summary,
+    is_valid_failure_classification,
+)
 
 
 __all__ = [
+    "__version__",
+    "SUPPORTED_ACTIONS",
     "ActionRequest",
     "DecisionReason",
     "DecisionResult",
@@ -37,8 +41,6 @@ __all__ = [
     "SupportedAction",
     "decide_action",
     "is_valid_action_request",
-    "__version__",
-    "SUPPORTED_ACTIONS",
     "FailureCategory",
     "FailureClassification",
     "FailureInput",
@@ -47,7 +49,7 @@ __all__ = [
     "FailureStatus",
     "classify_failure",
     "is_valid_failure_input",
-    "FailureSummary"
+    "FailureSummary",
+    "create_failure_summary",
+    "is_valid_failure_classification",
 ]
-
-
