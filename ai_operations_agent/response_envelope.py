@@ -19,3 +19,29 @@ class ResponseEnvelope:
             "status": self.status,
             "summary": self.summary.to_dict(),
         }
+
+
+def is_valid_response_summary(summary: object) -> bool:
+    """Return whether a value is a valid response summary."""
+
+    return isinstance(summary, FailureSummary)
+
+
+def create_response_envelope(summary: FailureSummary) -> ResponseEnvelope:
+    """Create a deterministic response envelope from a trusted summary."""
+
+    if not is_valid_response_summary(summary):
+        return ResponseEnvelope(
+            status="error",
+            summary=FailureSummary(
+                category="unknown",
+                severity="unknown",
+                reason="invalid_response_summary",
+                review_required=True,
+            ),
+        )
+
+    return ResponseEnvelope(
+        status="success",
+        summary=summary,
+    )
